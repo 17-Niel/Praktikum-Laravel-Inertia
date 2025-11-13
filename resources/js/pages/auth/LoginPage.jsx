@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, usePage } from "@inertiajs/react";
-import AuthLayout from "@/layouts/AuthLayout";
+import AuthLayout from "../../layouts/AuthLayout";
 import {
     Card,
     CardContent,
