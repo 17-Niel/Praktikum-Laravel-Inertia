@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { usePage, useForm, router, Link } from "@inertiajs/react";
-import AppLayout from "../../layouts/AppLayout";
-import { Button } from "../../components/ui/button";
+import AppLayout from "@/layouts/AppLayout";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";

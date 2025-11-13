@@ -9,8 +9,8 @@ import { createRoot } from 'react-dom/client';
 
 createInertiaApp({
   resolve: (name) => {
-    const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
-    const page = pages[`./Pages/${name}.jsx`];
+    const pages = import.meta.glob('./pages/**/*.jsx', { eager: true });
+    const page = pages[`./pages/${name}.jsx`];
     
     // Debugging: log untuk memastikan module ditemukan
     console.log('Resolving page:', name, page);

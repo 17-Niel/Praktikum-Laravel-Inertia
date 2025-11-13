@@ -1,20 +1,20 @@
 import React from "react";
-import AuthLayout from "../../layouts/AuthLayout"; // ← Ganti dengan relative path
+import AuthLayout from "@/layouts/AuthLayout";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "../../components/ui/card"; // ← Ganti dengan relative path
+} from "@/components/ui/card";
 import {
     Field,
     FieldLabel,
     FieldDescription,
     FieldGroup,
-} from "../../components/ui/field"; // ← Ganti dengan relative path
-import { Input } from "../../components/ui/input"; // ← Ganti dengan relative path
-import { Button } from "../../components/ui/button"; // ← Ganti dengan relative path
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Link, useForm } from "@inertiajs/react";
 
 export default function RegisterPage() {

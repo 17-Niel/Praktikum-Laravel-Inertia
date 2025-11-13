@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
-import path from "path";
 
 export default defineConfig({
     plugins: [
@@ -13,30 +12,14 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "./resources/js"),
-            "@/components": path.resolve(
-                __dirname,
-                "./resources/js/components"
-            ),
-            "@/layouts": path.resolve(__dirname, "./resources/js/Layouts"),
-            "@/pages": path.resolve(__dirname, "./resources/js/Pages"),
-            "@/lib": path.resolve(__dirname, "./resources/js/lib"),
+            "@": "/resources/js",
+            // Perbaikan: Mengganti '/resources/js/Components' menjadi '/resources/js/components'
+            // agar sesuai dengan struktur folder Anda yang menggunakan huruf kecil.
+            "@/components": "/resources/js/components",
+            "@/lib": "/resources/js/lib",
         },
     },
     optimizeDeps: {
         include: ["lucide-react"],
-    },
-    build: {
-        sourcemap: false, // Matikan sourcemap untuk production
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    vendor: ["react", "react-dom"],
-                    inertia: ["@inertiajs/react"],
-                    charts: ["recharts"],
-                    lucide: ["lucide-react"],
-                },
-            },
-        },
     },
 });
