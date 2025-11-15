@@ -12,8 +12,8 @@ createInertiaApp({
     const pages = import.meta.glob('./pages/**/*.jsx', { eager: true });
     const page = pages[`./pages/${name}.jsx`];
     
-    // Debugging: log untuk memastikan module ditemukan
-    console.log('Resolving page:', name, page);
+    // // Debugging: log untuk memastikan module ditemukan
+    // console.log('Resolving page:', name, page);
     
     if (!page) {
       throw new Error(`Page not found: ${name}`);

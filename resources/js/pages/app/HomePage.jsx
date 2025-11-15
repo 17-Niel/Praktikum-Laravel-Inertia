@@ -34,8 +34,8 @@ import "trix";
 const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
     return (
         <div className="group relative p-6 border border-gray-200 rounded-3xl mb-6 bg-white hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-purple-300 shadow-lg">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/50 to-pink-50/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-3xl"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-blue-50/50 via-purple-50/50 to-pink-50/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-3xl"></div>
 
             <div className="flex items-start justify-between relative z-10">
                 <div className="flex items-start gap-4 flex-1">
@@ -49,7 +49,7 @@ const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
                                 <CheckCircle2 className="h-8 w-8 text-emerald-500 relative drop-shadow-lg" />
                             </div>
                         ) : (
-                            <div className="p-2 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 shadow-inner border border-gray-200">
+                            <div className="p-2 rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 shadow-inner border border-gray-200">
                                 <Circle className="h-6 w-6 text-blue-500 hover:text-purple-500 transition-colors" />
                             </div>
                         )}
@@ -58,7 +58,7 @@ const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
                     <div className="flex gap-4 flex-1">
                         {todo.cover_url && (
                             <div className="relative flex-shrink-0">
-                                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-md opacity-30"></div>
+                                <div className="absolute -inset-2 bg-linear-to-r from-blue-500 to-purple-500 rounded-2xl blur-md opacity-30"></div>
                                 <img
                                     src={todo.cover_url}
                                     alt={todo.title}
@@ -68,7 +68,7 @@ const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
                         )}
                         <div className="flex-1 min-w-0">
                             <h3
-                                className={`font-bold text-xl mb-3 bg-gradient-to-r ${
+                                className={`font-bold text-xl mb-3 bg-linear-to-r ${
                                     todo.is_finished
                                         ? "from-gray-400 to-gray-500 line-through"
                                         : "from-gray-800 to-purple-700"
@@ -84,7 +84,7 @@ const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
                                     }}
                                 />
                             )}
-                            <div className="flex items-center gap-3 mt-4 text-sm text-gray-500 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl px-4 py-2.5 w-fit border border-gray-200">
+                            <div className="flex items-center gap-3 mt-4 text-sm text-gray-500 bg-linear-to-r from-gray-50 to-gray-100 rounded-2xl px-4 py-2.5 w-fit border border-gray-200">
                                 <Clock className="h-4 w-4" />
                                 <span className="font-medium">
                                     {new Date(
@@ -107,14 +107,14 @@ const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(todo)}
-                        className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 border border-blue-200 hover:border-blue-300 hover:scale-110 transition-all duration-300 shadow-lg"
+                        className="h-12 w-12 rounded-2xl bg-linear-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 border border-blue-200 hover:border-blue-300 hover:scale-110 transition-all duration-300 shadow-lg"
                     >
                         <Edit className="h-5 w-5 text-blue-600" />
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="h-12 w-12 rounded-2xl bg-gradient-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 border border-red-200 hover:border-red-300 hover:scale-110 transition-all duration-300 shadow-lg"
+                        className="h-12 w-12 rounded-2xl bg-linear-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 border border-red-200 hover:border-red-300 hover:scale-110 transition-all duration-300 shadow-lg"
                         onClick={() => onDelete(todo.id)}
                     >
                         <Trash2 className="h-5 w-5 text-red-600" />
@@ -125,8 +125,8 @@ const TodoItem = ({ todo, onEdit, onDelete, onToggleStatus }) => {
             <div
                 className={`absolute bottom-0 left-0 right-0 h-2 rounded-b-3xl ${
                     todo.is_finished
-                        ? "bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-600"
-                        : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+                        ? "bg-linear-to-r from-emerald-400 via-green-500 to-emerald-600"
+                        : "bg-linear-to-r from-blue-500 via-purple-500 to-pink-500"
                 }`}
             ></div>
         </div>
@@ -246,13 +246,13 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
             <div className="absolute inset-0" onClick={onClose}></div>
             <div className="relative z-10 w-full max-w-4xl animate-in zoom-in-95 duration-300">
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
-                    <div className="relative bg-gradient-to-br from-purple-600 via-pink-600 to-rose-600 p-10">
+                    <div className="relative bg-linear-to-r from-purple-600 via-pink-600 to-rose-600 p-10">
                         {/* Background Animasi */}
                         <div className="absolute inset-0 overflow-hidden">
                             {/* Gradient Orbs */}
-                            <div className="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                            <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur-3xl opacity-20 animate-pulse delay-1000"></div>
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full blur-3xl opacity-15 animate-bounce"></div>
+                            <div className="absolute -top-20 -left-20 w-60 h-60 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+                            <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-linear-to-r from-cyan-400 to-blue-500 rounded-full blur-3xl opacity-20 animate-pulse delay-1000"></div>
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-linear-to-r from-green-400 to-emerald-500 rounded-full blur-3xl opacity-15 animate-bounce"></div>
 
                             {/* Animated Grid */}
                             <div className="absolute inset-0 opacity-10">
@@ -298,7 +298,7 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                     <Target className="h-8 w-8 text-white drop-shadow-2xl" />
                                 </div>
                                 <div>
-                                    <h2 className="text-4xl font-black text-white drop-shadow-2xl bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent animate-gradient">
+                                    <h2 className="text-4xl font-black text-white drop-shadow-2xl bg-linear-to-r from-white to-white/80 bg-clip-text text-transparent animate-gradient">
                                         ✨ Edit Tugas
                                     </h2>
                                     <p className="text-white/80 text-lg mt-2 font-light animate-fade-in">
@@ -320,12 +320,12 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                     <div className="p-8 max-h-[calc(100vh-280px)] overflow-y-auto">
                         <form onSubmit={handleSubmit} className="space-y-7">
                             <div className="relative">
-                                <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                                    <div className="w-1.5 h-6 bg-gradient-to-b from-violet-500 to-purple-500 rounded-full shadow-md"></div>
+                                <label className="flex text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                                    <div className="w-1.5 h-6 bg-linear-to-b from-violet-500 to-purple-500 rounded-full shadow-md"></div>
                                     Judul Tugas
                                 </label>
                                 <div className="relative group">
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
+                                    <div className="absolute -inset-1 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
                                     <Input
                                         value={data.title}
                                         onChange={(e) =>
@@ -345,8 +345,8 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                             </div>
 
                             <div className="relative">
-                                <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                                    <div className="w-1.5 h-6 bg-gradient-to-b from-violet-500 to-purple-500 rounded-full shadow-md"></div>
+                                <label className="flex text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                                    <div className="w-1.5 h-6 bg-linear-to-b from-violet-500 to-purple-500 rounded-full shadow-md"></div>
                                     Deskripsi
                                     <span className="text-xs font-normal text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                                         Opsional
@@ -368,8 +368,8 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                             </div>
 
                             <div className="relative">
-                                <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                                    <div className="w-1.5 h-6 bg-gradient-to-b from-violet-500 to-purple-500 rounded-full shadow-md"></div>
+                                <label className="flex text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                                    <div className="w-1.5 h-6 bg-linear-to-b from-violet-500 to-purple-500 rounded-full shadow-md"></div>
                                     Cover Gambar
                                     <span className="text-xs font-normal text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                                         Opsional
@@ -379,15 +379,15 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                 {todoToEdit?.cover_url &&
                                     !data.remove_cover && (
                                         <div className="mb-6">
-                                            <div className="relative bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-6 border-2 border-purple-200/50 overflow-hidden shadow-2xl">
-                                                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
+                                            <div className="relative bg-linear-to-br from-purple-50 to-pink-50 rounded-3xl p-6 border-2 border-purple-200/50 overflow-hidden shadow-2xl">
+                                                <div className="absolute top-0 right-0 w-40 h-40 bg-linear-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
                                                 <p className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-3 relative">
                                                     <ImageIcon className="h-5 w-5 text-purple-600" />
                                                     Cover Saat Ini
                                                 </p>
                                                 <div className="flex flex-col items-center gap-4 relative">
                                                     <div className="relative">
-                                                        <div className="absolute -inset-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-md opacity-40"></div>
+                                                        <div className="absolute -inset-3 bg-linear-to-r from-purple-500 to-pink-500 rounded-2xl blur-md opacity-40"></div>
                                                         <img
                                                             src={
                                                                 todoToEdit.cover_url
@@ -403,7 +403,7 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                                         type="button"
                                                         variant="outline"
                                                         size="sm"
-                                                        className="h-12 px-6 rounded-2xl bg-gradient-to-r from-rose-50 to-red-50 hover:from-rose-100 hover:to-red-100 text-red-600 border-2 border-red-300 font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                                                        className="h-12 px-6 rounded-2xl bg-linear-to-r from-rose-50 to-red-50 hover:from-rose-100 hover:to-red-100 text-red-600 border-2 border-red-300 font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                                                         onClick={() => {
                                                             if (
                                                                 confirm(
@@ -432,10 +432,10 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                     htmlFor="cover-upload"
                                     className="group cursor-pointer block"
                                 >
-                                    <div className="relative bg-gradient-to-br from-purple-50 via-white to-pink-50 rounded-2xl p-8 border-2 border-dashed border-purple-300 hover:border-purple-500 transition-all duration-300 overflow-hidden hover:shadow-2xl">
-                                        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500"></div>
+                                    <div className="relative bg-linear-to-br from-purple-50 via-white to-pink-50 rounded-2xl p-8 border-2 border-dashed border-purple-300 hover:border-purple-500 transition-all duration-300 overflow-hidden hover:shadow-2xl">
+                                        <div className="absolute top-0 right-0 w-40 h-40 bg-linear-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500"></div>
                                         <div className="relative flex flex-col items-center justify-center text-center">
-                                            <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                                            <div className="bg-linear-to-br from-purple-500 to-pink-500 p-4 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-2xl">
                                                 <ImageIcon className="h-8 w-8 text-white" />
                                             </div>
                                             <p className="font-bold text-gray-700 mb-1 text-lg">
@@ -466,7 +466,7 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                 />
 
                                 {data.cover && (
-                                    <div className="mt-4 p-4 bg-gradient-to-r from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
+                                    <div className="mt-4 p-4 bg-linear-to-r from-emerald-50 to-green-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
                                         <p className="text-sm font-semibold text-emerald-700 flex items-center gap-2">
                                             <CheckCircle2 className="h-4 w-4" />
                                             File terpilih:{" "}
@@ -487,7 +487,7 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
 
                             {todoToEdit && (
                                 <div className="relative">
-                                    <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-purple-200 hover:border-purple-300 transition-all duration-200 shadow-lg">
+                                    <div className="bg-linear-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-purple-200 hover:border-purple-300 transition-all duration-200 shadow-lg">
                                         <label className="flex items-center gap-4 cursor-pointer group">
                                             <input
                                                 type="checkbox"
@@ -527,9 +527,9 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                 <Button
                                     type="submit"
                                     disabled={processing}
-                                    className="h-12 px-10 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 hover:from-violet-700 hover:via-purple-700 hover:to-fuchsia-700 text-white font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 border-0 relative overflow-hidden group"
+                                    className="h-12 px-10 rounded-2xl bg-linear-to-r from-violet-600 via-purple-600 to-fuchsia-600 hover:from-violet-700 hover:via-purple-700 hover:to-fuchsia-700 text-white font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 border-0 relative overflow-hidden group"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                                     <span className="relative flex items-center gap-2">
                                         {processing ? (
                                             <>
@@ -563,40 +563,42 @@ export default function HomePage() {
     const [statusFilter, setStatusFilter] = useState(filters.status || "all");
     const searchTimeoutRef = useRef(null);
 
-    useEffect(() => {
-        if (searchTimeoutRef.current) {
-            clearTimeout(searchTimeoutRef.current);
-        }
+    
 
-        searchTimeoutRef.current = setTimeout(() => {
-            const currentSearch = search.trim();
-            const currentStatus = statusFilter;
+ useEffect(() => {
+    const normalizedSearch = search ?? "";
+    const normalizedStatus = statusFilter ?? "all";
 
-            if (
-                currentSearch !== (filters.search || "") ||
-                currentStatus !== (filters.status || "all")
-            ) {
-                router.get(
-                    "/",
-                    {
-                        search: currentSearch,
-                        status: currentStatus,
-                    },
-                    {
-                        preserveState: true,
-                        replace: true,
-                        only: ["todos", "stats", "filters", "flash"],
-                    }
-                );
-            }
-        }, 500);
+    // Hindari request jika nilai sama dengan filters dari server
+    if (
+        normalizedSearch === (filters.search ?? "") &&
+        normalizedStatus === (filters.status ?? "all")
+    ) {
+        return;
+    }
 
-        return () => {
-            if (searchTimeoutRef.current) {
-                clearTimeout(searchTimeoutRef.current);
-            }
-        };
-    }, [search, statusFilter]);
+    clearTimeout(searchTimeoutRef.current);
+
+    searchTimeoutRef.current = setTimeout(() => {
+        router.get("/", {
+            search: normalizedSearch,
+            status: normalizedStatus,
+        }, {
+            preserveState: true,
+            replace: true,
+            only: ["todos", "stats", "filters", "flash"],
+        });
+    }, 500);
+
+    return () => clearTimeout(searchTimeoutRef.current);
+}, [search, statusFilter]);
+
+
+
+
+
+
+
 
     const handleFilterChange = (newStatus) => {
         setStatusFilter(newStatus);
@@ -646,12 +648,12 @@ export default function HomePage() {
 
     return (
         <AppLayout>
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50">
                 <div className="container mx-auto px-4 py-8 max-w-7xl">
                     <div className="grid lg:grid-cols-3 gap-8 mb-12">
                         <div className="lg:col-span-2">
                             <div className="mb-8">
-                                <h1 className="text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                                <h1 className="text-5xl font-black bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
                                     Selamat Datang, {auth.name}! 👋
                                 </h1>
                                 <p className="text-gray-600 text-xl font-light">
@@ -661,7 +663,7 @@ export default function HomePage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Card className="border-0 shadow-2xl rounded-3xl bg-gradient-to-br from-emerald-500 to-green-600 text-white overflow-hidden transform hover:scale-105 transition-all duration-500">
+                                <Card className="border-0 shadow-2xl rounded-3xl bg-linear-to-br from-emerald-500 to-green-600 text-white overflow-hidden transform hover:scale-105 transition-all duration-500">
                                     <CardContent className="p-8 relative">
                                         <div className="absolute top-6 right-6 opacity-20">
                                             <CheckCircle2 className="h-20 w-20" />
@@ -676,7 +678,7 @@ export default function HomePage() {
                                     </CardContent>
                                 </Card>
 
-                                <Card className="border-0 shadow-2xl rounded-3xl bg-gradient-to-br from-red-500 to-pink-600 text-white overflow-hidden transform hover:scale-105 transition-all duration-500">
+                                <Card className="border-0 shadow-2xl rounded-3xl bg-linear-to-br from-red-500 to-pink-600 text-white overflow-hidden transform hover:scale-105 transition-all duration-500">
                                     <CardContent className="p-8 relative">
                                         <div className="absolute top-6 right-6 opacity-20">
                                             <Clock className="h-20 w-20" />
@@ -738,7 +740,7 @@ export default function HomePage() {
                                     <div className="relative flex-1">
                                         <Search className="absolute left-4 top-4 h-5 w-5 text-gray-400 z-10" />
                                         <div className="relative group">
-                                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
+                                            <div className="absolute -inset-1 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
                                             <Input
                                                 placeholder="Cari tugas berdasarkan judul atau deskripsi..."
                                                 className="pl-12 h-14 rounded-2xl border-2 border-gray-200 focus:border-blue-500 transition-all duration-300 bg-white shadow-xl relative"
@@ -752,7 +754,7 @@ export default function HomePage() {
                                     <div className="relative">
                                         <Filter className="absolute left-4 top-4 h-5 w-5 text-gray-400 z-10" />
                                         <div className="relative group">
-                                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
+                                            <div className="absolute -inset-1 bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
                                             <select
                                                 className="h-14 rounded-2xl border-2 border-gray-200 bg-white pl-12 pr-8 text-sm shadow-xl focus:border-blue-500 transition-colors appearance-none cursor-pointer relative"
                                                 value={statusFilter}
@@ -777,7 +779,7 @@ export default function HomePage() {
                                 </div>
                                 <Button
                                     onClick={handleAdd}
-                                    className="w-full lg:w-auto h-14 px-8 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-500 shadow-2xl hover:shadow-3xl text-white font-black text-lg transform hover:scale-105"
+                                    className="w-full lg:w-auto h-14 px-8 rounded-2xl bg-linear-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-500 shadow-2xl hover:shadow-3xl text-white font-black text-lg transform hover:scale-105"
                                 >
                                     <Plus className="mr-3 h-6 w-6" />
                                     Tambah Tugas Baru
@@ -787,7 +789,7 @@ export default function HomePage() {
                     </Card>
 
                     {flash?.success && (
-                        <Alert className="mb-8 rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-green-50 text-emerald-800 shadow-2xl">
+                        <Alert className="mb-8 rounded-2xl border border-emerald-200 bg-linear-to-r from-emerald-50 to-green-50 text-emerald-800 shadow-2xl">
                             <AlertDescription className="flex items-center gap-3 text-lg font-semibold">
                                 <CheckCircle2 className="h-5 w-5" />
                                 {flash.success}
@@ -842,7 +844,7 @@ export default function HomePage() {
                                             }
                                             className={`px-5 py-3 text-sm rounded-xl font-bold transition-all duration-300 ${
                                                 link.active
-                                                    ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+                                                    ? "bg-linear-to-r from-blue-500 to-purple-500 text-white shadow-lg"
                                                     : "text-gray-600 hover:bg-gray-100"
                                             }`}
                                             dangerouslySetInnerHTML={{
