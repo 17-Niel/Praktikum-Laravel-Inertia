@@ -717,7 +717,7 @@ export default function HomePage() {
                         <div className="lg:col-span-2">
                             <div className="mb-8">
                                 <h1 className="text-5xl font-black bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                                    Selamat Datang, {auth.name}! 👋
+                                    Selamat Datang, {auth.name}! 
                                 </h1>
                                 <p className="text-gray-600 text-xl font-light">
                                     Kelola tugas harianmu dengan mudah dan
