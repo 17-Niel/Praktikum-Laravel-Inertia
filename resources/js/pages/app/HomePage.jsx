@@ -426,16 +426,30 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null, onSuccess }) => {
                                                                 text: "Cover gambar akan dihapus",
                                                                 icon: "warning",
                                                                 showCancelButton: true,
-                                                                confirmButtonColor: "#ef4444",
-                                                                cancelButtonColor: "#6b7280",
-                                                                confirmButtonText: "Ya, hapus!",
-                                                                cancelButtonText: "Batal",
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    setData("cover", null);
-                                                                    setData("remove_cover", true);
+                                                                confirmButtonColor:
+                                                                    "#ef4444",
+                                                                cancelButtonColor:
+                                                                    "#6b7280",
+                                                                confirmButtonText:
+                                                                    "Ya, hapus!",
+                                                                cancelButtonText:
+                                                                    "Batal",
+                                                            }).then(
+                                                                (result) => {
+                                                                    if (
+                                                                        result.isConfirmed
+                                                                    ) {
+                                                                        setData(
+                                                                            "cover",
+                                                                            null
+                                                                        );
+                                                                        setData(
+                                                                            "remove_cover",
+                                                                            true
+                                                                        );
+                                                                    }
                                                                 }
-                                                            });
+                                                            );
                                                         }}
                                                     >
                                                         <Trash2 className="h-5 w-5 mr-3" />
@@ -580,16 +594,33 @@ export default function HomePage() {
     const [statusFilter, setStatusFilter] = useState(filters.status || "all");
     const searchTimeoutRef = useRef(null);
 
-    // Fungsi show notification dengan SweetAlert2
+    // Fungsi show notification dengan SweetAlert2 - VERSI LENGKAP
     const showNotification = (type, message) => {
+        const backgroundColor = type === "success" ? "#f6ffed" : "#fff2f0";
+        const borderColor = type === "success" ? "#b7eb8f" : "#ffccc7";
+        const iconColor = type === "success" ? "#52c41a" : "#ff4d4f";
+
         Swal.fire({
-            title: type === "success" ? "Sukses!" : "Error!",
+            title: type === "success" ? "Berhasil!" : "Terjadi Kesalahan!",
             text: message,
             icon: type,
             timer: 3000,
             showConfirmButton: false,
-            toast: true,
-            position: "top-end",
+            position: "center",
+            background: backgroundColor,
+            color: "#000000d9",
+            width: "400px",
+            customClass: {
+                popup: "rounded-lg border-2",
+                title: "font-semibold text-base",
+                htmlContainer: "text-sm",
+            },
+            showClass: {
+                popup: "animate__animated animate__fadeInUp animate__faster",
+            },
+            hideClass: {
+                popup: "animate__animated animate__fadeOutDown animate__faster",
+            },
         });
     };
 
@@ -645,12 +676,12 @@ export default function HomePage() {
         setEditingTodo(null);
         setIsModalOpen(true);
     };
-    
+
     const handleEdit = (todo) => {
         setEditingTodo(todo);
         setIsModalOpen(true);
     };
-    
+
     const handleDelete = (id) => {
         Swal.fire({
             title: "Apakah Anda yakin?",
@@ -682,7 +713,7 @@ export default function HomePage() {
             }
         });
     };
-    
+
     const handleToggleStatus = (todo) => {
         router.post(
             `/todos/${todo.id}`,
@@ -717,7 +748,7 @@ export default function HomePage() {
                         <div className="lg:col-span-2">
                             <div className="mb-8">
                                 <h1 className="text-5xl font-black bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                                    Selamat Datang, {auth.name}! 
+                                    Selamat Datang, {auth.name}!
                                 </h1>
                                 <p className="text-gray-600 text-xl font-light">
                                     Kelola tugas harianmu dengan mudah dan
