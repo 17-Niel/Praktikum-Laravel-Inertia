@@ -86,12 +86,12 @@ left: 2px;
                     <div className="flex items-center justify-center gap-3 mb-2">
                         <div className="w-2 h-2 bg-linear-to-r from-blue-600 to-purple-600 rounded-full animate-pulse"></div>
                         <div className="text-lg font-black bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                            &copy; 2025 Zero To Hero
+                            &copy; 2035 King of World Stocks
                         </div>
                         <div className="w-2 h-2 bg-linear-to-r from-pink-600 to-purple-600 rounded-full animate-pulse"></div>
                     </div>
                     <p className="text-sm text-gray-600/80 font-medium">
-                        Built with ❤️ for maximum productivity
+                        chase 1000 lots of BBCA
                     </p>
                 </div>
             </footer>
