@@ -4,7 +4,7 @@ import AppLayout from "@/layouts/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import Swal from "sweetalert2";
 import {
     PieChart,
     Pie,
@@ -198,7 +198,7 @@ const TrixEditor = ({ value, onChange, placeholder, ...props }) => {
     );
 };
 
-const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
+const TodoModal = ({ isOpen, onClose, todoToEdit = null, onSuccess }) => {
     const { data, setData, post, processing, reset, errors, clearErrors } =
         useForm({
             title: todoToEdit?.title || "",
@@ -234,6 +234,23 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
             onSuccess: () => {
                 reset();
                 onClose();
+                // Panggil callback onSuccess dengan pesan yang sesuai
+                onSuccess(
+                    todoToEdit
+                        ? "Todo berhasil diedit!"
+                        : "Todo berhasil ditambahkan!"
+                );
+            },
+            onError: () => {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Gagal menyimpan todo!",
+                    icon: "error",
+                    timer: 3000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: "top-end",
+                });
             },
             forceFormData: true,
         });
@@ -398,27 +415,27 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                                             className="w-32 h-32 object-cover rounded-2xl border-4 border-white shadow-2xl relative"
                                                         />
                                                     </div>
-                                                    {/* Tombol Hapus dipindah ke bawah gambar */}
                                                     <Button
                                                         type="button"
                                                         variant="outline"
                                                         size="sm"
                                                         className="h-12 px-6 rounded-2xl bg-linear-to-r from-rose-50 to-red-50 hover:from-rose-100 hover:to-red-100 text-red-600 border-2 border-red-300 font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                                                         onClick={() => {
-                                                            if (
-                                                                confirm(
-                                                                    "Hapus cover gambar ini?"
-                                                                )
-                                                            ) {
-                                                                setData(
-                                                                    "cover",
-                                                                    null
-                                                                );
-                                                                setData(
-                                                                    "remove_cover",
-                                                                    true
-                                                                );
-                                                            }
+                                                            Swal.fire({
+                                                                title: "Hapus Cover?",
+                                                                text: "Cover gambar akan dihapus",
+                                                                icon: "warning",
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: "#ef4444",
+                                                                cancelButtonColor: "#6b7280",
+                                                                confirmButtonText: "Ya, hapus!",
+                                                                cancelButtonText: "Batal",
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    setData("cover", null);
+                                                                    setData("remove_cover", true);
+                                                                }
+                                                            });
                                                         }}
                                                     >
                                                         <Trash2 className="h-5 w-5 mr-3" />
@@ -563,6 +580,26 @@ export default function HomePage() {
     const [statusFilter, setStatusFilter] = useState(filters.status || "all");
     const searchTimeoutRef = useRef(null);
 
+    // Fungsi show notification dengan SweetAlert2
+    const showNotification = (type, message) => {
+        Swal.fire({
+            title: type === "success" ? "Sukses!" : "Error!",
+            text: message,
+            icon: type,
+            timer: 3000,
+            showConfirmButton: false,
+            toast: true,
+            position: "top-end",
+        });
+    };
+
+    // Handle flash messages dari Laravel
+    useEffect(() => {
+        if (flash?.success) {
+            showNotification("success", flash.success);
+        }
+    }, [flash]);
+
     useEffect(() => {
         const normalizedSearch = search ?? "";
         const normalizedStatus = statusFilter ?? "all";
@@ -608,22 +645,44 @@ export default function HomePage() {
         setEditingTodo(null);
         setIsModalOpen(true);
     };
+    
     const handleEdit = (todo) => {
         setEditingTodo(todo);
         setIsModalOpen(true);
     };
+    
     const handleDelete = (id) => {
-        if (confirm("Yakin ingin menghapus todo ini?")) {
-            router.delete(`/todos/${id}`, {
-                preserveState: true,
-                preserveScroll: true,
-                data: {
-                    search: search,
-                    status: statusFilter,
-                },
-            });
-        }
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Todo yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+            background: "#fff",
+            color: "#1f2937",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.delete(`/todos/${id}`, {
+                    preserveState: true,
+                    preserveScroll: true,
+                    data: {
+                        search: search,
+                        status: statusFilter,
+                    },
+                    onSuccess: () => {
+                        showNotification("success", "Todo berhasil dihapus!");
+                    },
+                    onError: () => {
+                        showNotification("error", "Gagal menghapus todo!");
+                    },
+                });
+            }
+        });
     };
+    
     const handleToggleStatus = (todo) => {
         router.post(
             `/todos/${todo.id}`,
@@ -637,6 +696,15 @@ export default function HomePage() {
             {
                 preserveScroll: true,
                 preserveState: true,
+                onSuccess: () => {
+                    const status = !todo.is_finished
+                        ? "diselesaikan"
+                        : "dipindahkan ke belum selesai";
+                    showNotification("success", `Todo berhasil ${status}!`);
+                },
+                onError: () => {
+                    showNotification("error", "Gagal mengubah status todo!");
+                },
             }
         );
     };
@@ -783,15 +851,6 @@ export default function HomePage() {
                         </CardContent>
                     </Card>
 
-                    {flash?.success && (
-                        <Alert className="mb-8 rounded-2xl border border-emerald-200 bg-linear-to-r from-emerald-50 to-green-50 text-emerald-800 shadow-2xl">
-                            <AlertDescription className="flex items-center gap-3 text-lg font-semibold">
-                                <CheckCircle2 className="h-5 w-5" />
-                                {flash.success}
-                            </AlertDescription>
-                        </Alert>
-                    )}
-
                     <Card className="border-0 shadow-2xl rounded-3xl bg-white overflow-hidden">
                         <CardContent className="p-8">
                             <div className="space-y-6">
@@ -864,6 +923,9 @@ export default function HomePage() {
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
                         todoToEdit={editingTodo}
+                        onSuccess={(message) => {
+                            showNotification("success", message);
+                        }}
                     />
                 </div>
             </div>
