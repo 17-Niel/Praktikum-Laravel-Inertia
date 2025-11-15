@@ -210,7 +210,7 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
             is_finished: todoToEdit?.is_finished || false,
             cover: null,
             _method: todoToEdit ? "PUT" : "POST",
-             remove_cover: false,
+            remove_cover: false, // ⬅️ PASTIKAN INI ADA
         });
 
     useEffect(() => {
@@ -221,6 +221,7 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                 is_finished: todoToEdit.is_finished,
                 cover: null,
                 _method: "PUT",
+                remove_cover: false, // ⬅️ TAMBAHKAN INI
             });
         } else {
             reset();
@@ -233,7 +234,35 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
         e.preventDefault();
         const url = todoToEdit ? `/todos/${todoToEdit.id}` : "/todos";
 
+        // Buat FormData untuk mengirim file dan data
+        const formData = new FormData();
+        formData.append("_method", todoToEdit ? "PUT" : "POST");
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+
+        if (todoToEdit) {
+            formData.append("is_finished", data.is_finished);
+            formData.append(
+                "remove_cover",
+                data.remove_cover ? "true" : "false"
+            );
+        }
+
+        if (data.cover) {
+            formData.append("cover", data.cover);
+        }
+
+        // Debug: lihat data yang dikirim
+        console.log("📤 Data yang dikirim ke backend:", {
+            title: data.title,
+            description: data.description,
+            is_finished: data.is_finished,
+            remove_cover: data.remove_cover,
+            cover: data.cover ? data.cover.name : "null",
+        });
+
         post(url, {
+            data: formData,
             onSuccess: () => {
                 reset();
                 onClose();
@@ -241,7 +270,6 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
             forceFormData: true,
         });
     };
-
     if (!isOpen) return null;
 
     return (
@@ -321,18 +349,20 @@ const TodoModal = ({ isOpen, onClose, todoToEdit = null }) => {
                                                 size="icon"
                                                 className="h-6 w-6 rounded-full bg-red-500 hover:bg-red-600 text-white"
                                                 onClick={() => {
-                                                    // Opsional: Tambahkan konfirmasi hapus cover
                                                     if (
                                                         confirm(
                                                             "Hapus cover gambar?"
                                                         )
                                                     ) {
-                                                        setData("cover", null);
-                                                        // Anda mungkin perlu flag untuk hapus cover yang ada
+                                                        // ⬇️ PERBAIKAN: Pastikan remove_cover di-set ke true
                                                         setData(
                                                             "remove_cover",
                                                             true
                                                         );
+                                                        setData("cover", null);
+
+                                                        // Opsional: Sembunyikan gambar setelah dihapus
+                                                        // Anda bisa menggunakan state untuk menyembunyikan preview
                                                     }
                                                 }}
                                             >

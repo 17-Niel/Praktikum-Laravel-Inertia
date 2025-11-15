@@ -94,30 +94,36 @@ class TodoController extends Controller
     /**
      * Memperbarui todo.
      */
-    public function update(Request $request, Todo $todo)
-    {
-        // Otorisasi: Pastikan user hanya bisa edit punya sendiri
-        if ($todo->user_id !== Auth::id()) abort(403);
+   public function update(Request $request, Todo $todo)
+{
+    if ($todo->user_id !== Auth::id()) abort(403);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'is_finished' => 'boolean',
-            'cover' => 'nullable|image|max:2048',
-        ]);
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'is_finished' => 'boolean',
+        'cover' => 'nullable|image|max:2048',
+    ]);
 
-        // Ambil data yang dikirim, termasuk is_finished
-        $data = $request->only('title', 'description', 'is_finished');
-        // Handle hapus cover
-    if ($request->has('remove_cover') && $request->remove_cover) {
+    $data = $request->only('title', 'description', 'is_finished');
+
+    // Debug: lihat data yang diterima
+    \Log::info('🔄 Update Todo - Remove Cover:', [
+        'remove_cover' => $request->input('remove_cover'),
+        'todo_id' => $todo->id,
+        'current_cover' => $todo->cover
+    ]);
+
+    // Handle hapus cover
+    if ($request->input('remove_cover') === 'true') {
         if ($todo->cover) {
             Storage::disk('public')->delete($todo->cover);
+            \Log::info('✅ Cover deleted: ' . $todo->cover);
         }
         $data['cover'] = null;
     }
     // Handle upload cover baru
     else if ($request->hasFile('cover')) {
-        // Hapus cover lama jika ada
         if ($todo->cover) {
             Storage::disk('public')->delete($todo->cover);
         }
