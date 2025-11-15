@@ -6,7 +6,7 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia; // Tambahkan ini jika belum ada, untuk fungsi inertia()
+use Inertia\Inertia;
 
 class TodoController extends Controller
 {
@@ -39,12 +39,7 @@ class TodoController extends Controller
         $todos = $query->paginate(20)->withQueryString();
 
         // Menambahkan URL cover ke setiap item todo
-        // CATATAN: Karena $todos adalah Paginator, kita harus menggunakan getCollection() 
-        // untuk mengakses item yang sebenarnya.
         $todos->getCollection()->transform(function ($todo) {
-            // Asumsi ada accessor/mutator cover_url di model Todo
-            // Atau Anda menggunakan Storage facade untuk membuat URL secara manual
-            // Contoh sederhana:
             $todo->cover_url = $todo->cover 
                 ? Storage::disk('public')->url($todo->cover) 
                 : null;
@@ -57,9 +52,8 @@ class TodoController extends Controller
             'unfinished' => $user->todos()->where('is_finished', false)->count(),
         ];
 
-        // Pastikan nama halaman Inertia sesuai dengan file JSX Anda (HomePage.jsx)
         return inertia('app/HomePage', [ 
-            'auth' => ['name' => $user->name], // Kirim data user yang diperlukan saja
+            'auth' => ['name' => $user->name],
             'todos' => $todos,
             'stats' => $stats,
             'filters' => $request->only(['search', 'status']),
@@ -74,15 +68,14 @@ class TodoController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'cover' => 'nullable|image|max:2048', // Maks 2MB
+            'cover' => 'nullable|image|max:2048',
         ]);
 
         $data = $request->only('title', 'description');
         $data['user_id'] = Auth::id();
-        $data['is_finished'] = false; // Default: belum selesai
+        $data['is_finished'] = false;
 
         if ($request->hasFile('cover')) {
-            // Simpan file di direktori 'todos' pada disk 'public'
             $data['cover'] = $request->file('cover')->store('todos', 'public');
         }
 
@@ -96,7 +89,6 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        // Otorisasi: Pastikan user hanya bisa edit punya sendiri
         if ($todo->user_id !== Auth::id()) abort(403);
 
         $request->validate([
@@ -106,35 +98,38 @@ class TodoController extends Controller
             'cover' => 'nullable|image|max:2048',
         ]);
 
-        // Ambil data yang dikirim, termasuk is_finished
         $data = $request->only('title', 'description', 'is_finished');
-        // Handle hapus cover
-    if ($request->has('remove_cover') && $request->remove_cover) {
-        if ($todo->cover) {
-            Storage::disk('public')->delete($todo->cover);
+        
+        if ($request->has('remove_cover') && $request->remove_cover) {
+            if ($todo->cover) {
+                Storage::disk('public')->delete($todo->cover);
+            }
+            $data['cover'] = null;
         }
-        $data['cover'] = null;
-    }
-    // Handle upload cover baru
-    else if ($request->hasFile('cover')) {
-        // Hapus cover lama jika ada
-        if ($todo->cover) {
-            Storage::disk('public')->delete($todo->cover);
+        else if ($request->hasFile('cover')) {
+            if ($todo->cover) {
+                Storage::disk('public')->delete($todo->cover);
+            }
+            $data['cover'] = $request->file('cover')->store('todos', 'public');
         }
-        $data['cover'] = $request->file('cover')->store('todos', 'public');
+
+        $todo->update($data);
+
+        return redirect()->back()->with('success', 'Todo berhasil diperbarui.');
     }
 
-    $todo->update($data);
-
-    return redirect()->back()->with('success', 'Todo berhasil diperbarui.');
-}
     /**
      * Menghapus todo.
      */
-    public function destroy(Todo $todo)
+    public function destroy(Request $request, Todo $todo)
     {
         // Otorisasi
         if ($todo->user_id !== Auth::id()) abort(403);
+
+        // Simpan parameter pagination sebelum menghapus
+        $currentPage = $request->get('page', 1);
+        $search = $request->get('search');
+        $status = $request->get('status', 'all');
 
         // Hapus file cover dari storage
         if ($todo->cover) {
@@ -143,6 +138,41 @@ class TodoController extends Controller
 
         $todo->delete();
 
-        return redirect()->back()->with('success', 'Todo berhasil dihapus.');
+        // Hitung total item setelah penghapusan
+        $user = Auth::user();
+        $query = $user->todos()->latest();
+
+        // Terapkan filter yang sama seperti di index()
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'ilike', '%' . $search . '%')
+                  ->orWhere('description', 'ilike', '%' . $search . '%');
+            });
+        }
+
+        if ($status !== 'all') {
+            $query->where('is_finished', $status === 'finished');
+        }
+
+        $totalItems = $query->count();
+        $perPage = 20;
+        $totalPages = ceil($totalItems / $perPage);
+
+        // Jika halaman current lebih besar dari total halaman yang tersedia,
+        // dan total halaman > 0, redirect ke halaman sebelumnya
+        if ($currentPage > $totalPages && $totalPages > 0) {
+            $currentPage = $totalPages;
+        }
+
+        // Jika tidak ada item sama sekali, tetap di halaman 1
+        if ($totalPages === 0) {
+            $currentPage = 1;
+        }
+
+        return redirect()->route('home', [
+            'page' => $currentPage,
+            'search' => $search,
+            'status' => $status
+        ])->with('success', 'Todo berhasil dihapus.');
     }
 }
