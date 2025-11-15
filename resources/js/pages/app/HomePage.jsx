@@ -563,42 +563,37 @@ export default function HomePage() {
     const [statusFilter, setStatusFilter] = useState(filters.status || "all");
     const searchTimeoutRef = useRef(null);
 
-    
+    useEffect(() => {
+        const normalizedSearch = search ?? "";
+        const normalizedStatus = statusFilter ?? "all";
 
- useEffect(() => {
-    const normalizedSearch = search ?? "";
-    const normalizedStatus = statusFilter ?? "all";
+        // Hindari request jika nilai sama dengan filters dari server
+        if (
+            normalizedSearch === (filters.search ?? "") &&
+            normalizedStatus === (filters.status ?? "all")
+        ) {
+            return;
+        }
 
-    // Hindari request jika nilai sama dengan filters dari server
-    if (
-        normalizedSearch === (filters.search ?? "") &&
-        normalizedStatus === (filters.status ?? "all")
-    ) {
-        return;
-    }
+        clearTimeout(searchTimeoutRef.current);
 
-    clearTimeout(searchTimeoutRef.current);
+        searchTimeoutRef.current = setTimeout(() => {
+            router.get(
+                "/",
+                {
+                    search: normalizedSearch,
+                    status: normalizedStatus,
+                },
+                {
+                    preserveState: true,
+                    replace: true,
+                    only: ["todos", "stats", "filters", "flash"],
+                }
+            );
+        }, 500);
 
-    searchTimeoutRef.current = setTimeout(() => {
-        router.get("/", {
-            search: normalizedSearch,
-            status: normalizedStatus,
-        }, {
-            preserveState: true,
-            replace: true,
-            only: ["todos", "stats", "filters", "flash"],
-        });
-    }, 500);
-
-    return () => clearTimeout(searchTimeoutRef.current);
-}, [search, statusFilter]);
-
-
-
-
-
-
-
+        return () => clearTimeout(searchTimeoutRef.current);
+    }, [search, statusFilter]);
 
     const handleFilterChange = (newStatus) => {
         setStatusFilter(newStatus);
